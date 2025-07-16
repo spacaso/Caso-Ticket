@@ -104,6 +104,7 @@ client.on('ready', async () => {
         '⚠️ **Please do not spam tickets or harass staff — you may be blacklisted.**',
         '📌 **You will be prompted with questions — fill them out to proceed.**'
       ].join('\n\n')
+    .setFooter({ text: '© All rights reserved by Spacaso Zone' })
     )
 
   const menu = new StringSelectMenuBuilder()
