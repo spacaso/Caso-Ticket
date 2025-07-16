@@ -51,9 +51,32 @@ client.on('interactionCreate', async interaction => {
     ]
   })
 
-  await channel.send({
-    content: `Hey <@${interaction.user.id}> — thanks for reaching out!\nWe'll be with you shortly regarding **${selected.replace('_', ' ')}**.`
-  })
+const mention = `<@&${SUPPORT_ROLE}>`
+let ticketMessage = ''
+
+switch (selected) {
+  case 'general_support':
+    ticketMessage = `Hey <@${interaction.user.id}> 👋\n\nThanks for opening a **General Support** ticket. One of our team members ${mention} will respond when they're next available!\nThank you for your patience.`
+    break
+  case 'billing_support':
+    ticketMessage = `Hey <@${interaction.user.id}> 👋\n\nThanks for opening a **Billing Support** ticket. ${mention} will assist you shortly with your billing-related issue.`
+    break
+  case 'player_reports':
+    ticketMessage = `Hey <@${interaction.user.id}> 👋\n\nThanks for reporting a player. Please provide evidence or describe the incident and ${mention} will investigate.`
+    break
+  case 'staff_reports':
+    ticketMessage = `Hey <@${interaction.user.id}> 👋\n\nThanks for submitting a staff report. Please provide evidence and details — ${mention} will review your report shortly.`
+    break
+  case 'bug_reports':
+    ticketMessage = `Hey <@${interaction.user.id}> 👋\n\nThanks for reporting a bug. ${mention} will review the issue and forward it to the dev team if needed.`
+    break
+  default:
+    ticketMessage = `Hey <@${interaction.user.id}> — thank you for your ticket. Our team ${mention} will respond shortly.`
+    break
+}
+
+await channel.send({ content: ticketMessage })
+
 
   await interaction.reply({
     content: `✅ Your ticket has been opened: ${channel}`,
