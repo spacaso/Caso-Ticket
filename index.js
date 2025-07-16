@@ -64,41 +64,39 @@ client.on('interactionCreate', async interaction => {
 client.on('ready', async () => {
   const panelChannel = await client.channels.fetch(PANEL_CHANNEL_ID)
 
-  const embed = new EmbedBuilder()
-    .setColor('Blurple')
-    .setTitle('Need help?')
-    .setDescription('Select the type of support you need from the menu below.')
+
+  const infoEmbed = new EmbedBuilder()
+    .setColor('Yellow')
+    .setTitle('📩 | Do you require assistance?')
+    .setDescription(
+      [
+        '**Need help, or Support in general?**',
+        'Feel free to open a Ticket to get Support from our Staff Team in the following categories below!\n',
+        '🟣 **| General Support**\nIf you need help or have a question that doesn’t fit any specific category, choose this.',
+        '🟣 **| Billing Support**\nUse this if you’re facing issues with purchases, rewards, or anything billing-related.',
+        '🟣 **| Player Reports**\nReport hacking, swearing, harassment, or other rule-breaking behavior.',
+        '🟣 **| Staff Reports**\nReport abuse of power or misconduct by a staff member.',
+        '🟣 **| Connection Issues**\nChoose this if you’re unable to connect to the server or facing lag-related issues.',
+        '🟣 **| Bug Reports**\nReport bugs, glitches, or issues so our dev team can investigate.\n',
+        '⚠️ **Please do not spam tickets or harass staff — you may be blacklisted.**',
+        '📌 **You will be prompted with questions — fill them out to proceed.**'
+      ].join('\n\n')
+    )
 
   const menu = new StringSelectMenuBuilder()
     .setCustomId('ticket_select')
     .setPlaceholder('Choose a ticket type...')
     .addOptions(
-      {
-        label: 'General Support',
-        value: 'general_support'
-      },
-      {
-        label: 'Billing Support',
-        value: 'billing_support'
-      },
-      {
-        label: 'Player Reports',
-        value: 'player_reports'
-      },
-      {
-        label: 'Staff Reports',
-        value: 'staff_reports'
-      },
-      {
-        label: 'Bug Reports',
-        value: 'bug_reports'
-      }
+      { label: 'General Support', value: 'general_support' },
+      { label: 'Billing Support', value: 'billing_support' },
+      { label: 'Player Reports', value: 'player_reports' },
+      { label: 'Staff Reports', value: 'staff_reports' },
+      { label: 'Bug Reports', value: 'bug_reports' }
     )
 
   const row = new ActionRowBuilder().addComponents(menu)
 
-  await panelChannel.send({ embeds: [embed], components: [row] })
+  await panelChannel.send({ embeds: [infoEmbed], components: [row] })
 })
 
 client.login(process.env.BOT_TOKEN)
-
