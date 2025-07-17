@@ -90,22 +90,21 @@ client.on('ready', async () => {
 
   const infoEmbed = new EmbedBuilder()
     .setColor('Yellow')
-    .setTitle('📩 | Do you require assistance?')
-    .setDescription(
-      [
-        '**Need help, or Support in general?**',
-        'Feel free to open a Ticket to get Support from our Staff Team in the following categories below!\n',
-        '🟣 **| General Support**\nIf you need help or have a question that doesn’t fit any specific category, choose this.',
-        '🟣 **| Billing Support**\nUse this if you’re facing issues with purchases, rewards, or anything billing-related.',
-        '🟣 **| Player Reports**\nReport hacking, swearing, harassment, or other rule-breaking behavior.',
-        '🟣 **| Staff Reports**\nReport abuse of power or misconduct by a staff member.',
-        '🟣 **| Connection Issues**\nChoose this if you’re unable to connect to the server or facing lag-related issues.',
-        '🟣 **| Bug Reports**\nReport bugs, glitches, or issues so our dev team can investigate.\n',
-        '⚠️ **Please do not spam tickets or harass staff — you may be blacklisted.**',
-        '📌 **You will be prompted with questions — fill them out to proceed.**'
-      ].join('\n\n')
-    .setFooter({ text: '© All rights reserved by Spacaso Zone' })
-    )
+    .setTitle('📨 | Need Support?')
+    .setDescription([
+      'Welcome to the support panel. To get assistance, select the appropriate category from the menu below to open a private ticket.\n',
+
+      '📁 **General Support**\nFor general questions or concerns that don’t fit into a specific category.',
+      '💳 **Billing Support**\nHelp with payments, purchases, or rewards.',
+      '👤 **Player Reports**\nReport rule violations, harassment, or unfair behavior.',
+      '🛡️ **Staff Reports**\nConcerns about staff conduct or abuse of power.',
+      '🌐 **Connection Issues**\nExperiencing lag, disconnections, or server access problems.',
+      '🐞 **Bug Reports**\nFound a glitch or issue? Report it so we can investigate.\n',
+
+      '⚠️ **Please don’t misuse tickets. Spamming or harassing staff may result in penalties.**',
+      '✍️ Be as detailed as possible when prompted — it helps us resolve your issue faster.'
+    ].join('\n\n'))
+    .setFooter({ text: '© All Rights Reserved by Spacaso Zone' });
 
   const menu = new StringSelectMenuBuilder()
     .setCustomId('ticket_select')
