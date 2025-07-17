@@ -182,38 +182,42 @@ client.on('ready', async () => {
     ].join('\n\n'))
     .setFooter({ text: '© All Rights Reserved by Spacaso Zone' });
 
-  .addOptions(
-    {
-      label: '📁 General Support',
-      value: 'general_support',
-      description: 'Questions or issues not tied to a specific category.'
-    },
-    {
-      label: '💳 Billing Support',
-      value: 'billing_support',
-      description: 'Help with payments, purchases, or transaction issues.'
-    },
-    {
-      label: '👤 Player Reports',
-      value: 'player_reports',
-      description: 'Report rule-breaking, harassment, or unfair behavior.'
-    },
-    {
-      label: '🛡️ Staff Reports',
-      value: 'staff_reports',
-      description: 'Report misconduct or abuse by a staff member.'
-    },
-    {
-      label: '🐞 Bug Reports',
-      value: 'bug_reports',
-      description: 'Found a glitch or bug? Let us know here.'
-    },
-    {
-      label: '🌐 Connection Issues',
-      value: 'connection_issues',
-      description: 'Report lag, disconnections, or access problems.'
-    }
-  )
+  const menu = new StringSelectMenuBuilder()
+    .setCustomId('ticket_select')
+    .setPlaceholder('Choose a support category')
+    .addOptions(
+      {
+        label: '📁 General Support',
+        value: 'general_support',
+        description: 'Questions or issues not tied to a specific category.'
+      },
+      {
+        label: '💳 Billing Support',
+        value: 'billing_support',
+        description: 'Help with payments, purchases, or transaction issues.'
+      },
+      {
+        label: '👤 Player Reports',
+        value: 'player_reports',
+        description: 'Report rule-breaking, harassment, or unfair behavior.'
+      },
+      {
+        label: '🛡️ Staff Reports',
+        value: 'staff_reports',
+        description: 'Report misconduct or abuse by a staff member.'
+      },
+      {
+        label: '🐞 Bug Reports',
+        value: 'bug_reports',
+        description: 'Found a glitch or bug? Let us know here.'
+      },
+      {
+        label: '🌐 Connection Issues',
+        value: 'connection_issues',
+        description: 'Report lag, disconnections, or access problems.'
+      }
+    );
+
 
 
   const row = new ActionRowBuilder().addComponents(menu)
