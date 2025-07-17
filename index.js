@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, StringSelectMenuBuilder, ActionRowBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js')
+const { Client, GatewayIntentBits, StringSelectMenuBuilder, ActionRowBuilder, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, PermissionsBitField } = require('discord.js')
 require('dotenv').config()
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
@@ -19,8 +19,84 @@ client.once('ready', () => {
 })
 
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isStringSelectMenu()) return
-  if (interaction.customId !== 'ticket_select') return
+  if (interaction.isStringSelectMenu() && interaction.customId === 'ticket_select') {
+    const selected = interaction.values[0];
+
+    const modal = new ModalBuilder()
+      .setCustomId(`ticket_modal_${selected}`)
+      .setTitle('Help us understand your issue');
+
+    const questions = {
+      general_support: [
+        ['general_reason', 'Briefly describe your issue', TextInputStyle.Paragraph]
+      ],
+      billing_support: [
+        ['billing_id', 'Your Transaction ID', TextInputStyle.Short],
+        ['billing_problem', 'Describe the issue', TextInputStyle.Paragraph]
+      ],
+      player_reports: [
+        ['player_name', 'Player username/tag', TextInputStyle.Short],
+        ['player_reason', 'Reason for report', TextInputStyle.Paragraph]
+      ],
+      staff_reports: [
+        ['staff_name', 'Staff name or role', TextInputStyle.Short],
+        ['staff_reason', 'Describe the incident', TextInputStyle.Paragraph]
+      ],
+      bug_reports: [
+        ['bug_summary', 'What bug did you find?', TextInputStyle.Paragraph]
+      ],
+      connection_issues: [
+        ['connection_problem', 'Describe the issue you’re facing', TextInputStyle.Paragraph]
+      ]
+    };
+
+    const inputs = questions[selected].map(([id, label, style]) =>
+      new TextInputBuilder().setCustomId(id).setLabel(label).setStyle(style).setRequired(true)
+    );
+
+    const rows = inputs.map(input => new ActionRowBuilder().addComponents(input));
+    modal.addComponents(...rows);
+
+    await interaction.showModal(modal);
+  }
+
+  if (interaction.isModalSubmit() && interaction.customId.startsWith('ticket_modal_')) {
+    const categoryKey = interaction.customId.replace('ticket_modal_', '');
+    const categoryId = CATEGORY_MAP[categoryKey];
+    const channel = await interaction.guild.channels.create({
+      name: `${categoryKey}-${interaction.user.username}`,
+      type: 0,
+      parent: categoryId,
+      permissionOverwrites: [
+        {
+          id: interaction.guild.id,
+          deny: [PermissionsBitField.Flags.ViewChannel]
+        },
+        {
+          id: interaction.user.id,
+          allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+        },
+        {
+          id: SUPPORT_ROLE,
+          allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+        }
+      ]
+    });
+
+    const fields = interaction.fields.fields.map(f => `**${f.customId.replace(/_/g, ' ')}**:\n${f.value}`).join('\n\n');
+
+    const embed = new EmbedBuilder()
+      .setColor('Yellow')
+      .setTitle('📩 New Ticket Opened')
+      .setDescription(`Opened by: <@${interaction.user.id}>\n\n${fields}`)
+      .setFooter({ text: '© All Rights Reserved by Spacaso Zone' });
+
+    await channel.send({ content: `<@&${SUPPORT_ROLE}>`, embeds: [embed] });
+
+    await interaction.reply({ content: `✅ Your ticket has been opened: ${channel}`, ephemeral: true });
+  }
+});
+
 
   const selected = interaction.values[0]
   const categoryId = CATEGORY_MAP[selected]
